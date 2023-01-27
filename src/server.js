@@ -6,12 +6,20 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-//route for searching your notes
+//route for searching your sites
 app.get("/api/search/:searchValue", async (req, res) => {
   const searchValue = req.params.searchValue;
   const result = await database.raw(
-    `select * from sites where name like '%${searchValue}%' or category like '%${searchValue}%' or status like '%${searchValue}%''`,
+    `select * from sites where name like '%${searchValue}%' or category like '%${searchValue}%' or status like '%${searchValue}%'`,
   );
+  res.status(200);
+  res.json(result);
+});
+
+app.get("/api/search/:site_id/items/:searchValue", async (req, res) => {
+  const searchValue = req.params.searchValue;
+  const site_id = req.params.site_id;
+  const result = await database.raw(`select * from items where description like '%${searchValue}%' or notes like '%${searchValue}%' or item like '%${searchValue}%' and site_id=${site_id}`);
   res.status(200);
   res.json(result);
 });
