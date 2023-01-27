@@ -35,10 +35,28 @@ app.get("/api/sites", async (req, res) => {
   res.json(result);
 });
 
-//get one single note
+//get one single site
 app.get("/api/sites/:id", async (req, res) => {
   const id = req.params.id;
   const result = await database.raw(`select * from sites where id='${id}'`);
+  res.status(200);
+  res.json(result);
+});
+
+//get the items of the specific jobsite
+app.get("/api/sites/:id/items", async (req, res) => {
+  const id = req.params.id;
+  const result = await database.raw(`select * from items where site_id='${id}'`);
+  res.status(200);
+  res.json(result);
+});
+
+//update the item
+app.put("/api/item/:id", async (req, res) => {
+  const id = req.params.id;
+  const { item, quantity, description, notes } = req.body;
+  await database.raw(`update items set item='${item}', quantity='${quantity}', description='${description}', notes='${notes}' where id=${id}`);
+  const result = await database.raw(`select * from items where id= ${id}`);
   res.status(200);
   res.json(result);
 });
