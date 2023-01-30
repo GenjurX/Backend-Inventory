@@ -16,10 +16,11 @@ app.get("/api/search/:searchValue", async (req, res) => {
   res.json(result);
 });
 
+//route for searching items
 app.get("/api/search/:site_id/items/:searchValue", async (req, res) => {
   const searchValue = req.params.searchValue;
   const site_id = req.params.site_id;
-  const result = await database.raw(`select * from items where description like '%${searchValue}%' or notes like '%${searchValue}%' or item like '%${searchValue}%' and site_id=${site_id}`);
+  const result = await database.raw(`select * from items where site_id=${site_id} and (description like '%${searchValue}%' or notes like '%${searchValue}%' or item like '%${searchValue}%') `);
   res.status(200);
   res.json(result);
 });
