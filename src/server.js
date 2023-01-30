@@ -17,10 +17,9 @@ app.get("/api/search/:searchValue", async (req, res) => {
 });
 
 //route for searching items
-app.get("/api/search/:site_id/items/:searchValue", async (req, res) => {
+app.get("/api/search/items/:searchValue", async (req, res) => {
   const searchValue = req.params.searchValue;
-  const site_id = req.params.site_id;
-  const result = await database.raw(`select * from items where site_id=${site_id} and (description like '%${searchValue}%' or notes like '%${searchValue}%' or item like '%${searchValue}%') `);
+  const result = await database.raw(`select * from items where (description like '%${searchValue}%' or notes like '%${searchValue}%' or item like '%${searchValue}%') `);
   res.status(200);
   res.json(result);
 });
@@ -53,9 +52,8 @@ app.get("/api/sites/:id", async (req, res) => {
 });
 
 //get the items of the specific jobsite
-app.get("/api/sites/:id/items", async (req, res) => {
-  const id = req.params.id;
-  const result = await database.raw(`select * from items where site_id='${id}'`);
+app.get("/api/items", async (req, res) => {
+  const result = await database.raw(`select * from items`);
   res.status(200);
   res.json(result);
 });
